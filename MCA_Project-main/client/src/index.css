@@ -1,12 +1,40 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@100..900&display=swap");
 @import "tailwindcss";
+@import "./styles/tokens.css";
+@import "./styles/animations.css";
 
-*{
-  font-family: "Outfit", sans-serif;
+* {
+  font-family: var(--font-body);
 }
 
-@theme{
-  --color-primary: #5044E5;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* Ensure no white backgrounds anywhere */
+html, body, #root {
+  background-color: #050816;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+@theme {
+  --color-primary: #7C3AED;
+  --color-accent: #3B82F6;
+  --color-cyan: #06B6D4;
+  --color-bg-base: #050816;
+  --color-bg-surface: #0F0F23;
+  --color-bg-card: #13132A;
+  --color-border: rgba(255,255,255,0.08);
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #94A3B8;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
 }
 
 .reset-tw, .reset-tw * {

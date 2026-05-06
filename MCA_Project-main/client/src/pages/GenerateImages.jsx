@@ -1,10 +1,10 @@
-import { Image, Sparkles } from "lucide-react";
+import { Image, Sparkles, Download } from "lucide-react";
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
 import toast from "react-hot-toast";
 
-//After Backend
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 const GenerateImages = () => {
@@ -21,8 +21,6 @@ const GenerateImages = () => {
   const [selectedStyle, setSelectedStyle] = useState("Realistic");
   const [input, setInput] = useState("");
   const [publish, setPublish] = useState(false);
-
-  //After Backend
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState("");
 
@@ -31,11 +29,9 @@ const GenerateImages = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
-    //After Backend
     try {
       setLoading(true);
-      const prompt = `Generate an image of ${input} 
-      in the style ${selectedStyle}`;
+      const prompt = `Generate an image of ${input} in the style ${selectedStyle}`;
 
       const { data } = await axios.post(
         "/api/ai/generate-image",
@@ -55,107 +51,180 @@ const GenerateImages = () => {
   };
 
   return (
-    <div
-      className="h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4
-    text-slate-700"
-    >
-      {/* left col */}
-      <form
-        onSubmit={onSubmitHandler}
-        className="w-full max-w-lg p-4 bg-white rounded-lg border border-gray-200"
+    <div className="h-full overflow-y-auto p-6 bg-bg-base">
+      {/* Page Header with Animation */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="mb-8"
       >
-        <div className="flex items-center gap-3">
-          <Sparkles className="w-6 text-[#00AD25]" />
-          <h1 className="text-xl font-semibold">AI Image Generator</h1>
-        </div>
-        <p className="mt-6 text-sm font-medium">Describe your image</p>
+        <h1 className="text-4xl font-bold mb-2">
+          <span className="gradient-text">AI Image Generator</span>
+        </h1>
+        <p className="text-text-secondary text-lg">
+          Create stunning images from text descriptions
+        </p>
+      </motion.div>
 
-        <textarea
-          onChange={(e) => setInput(e.target.value)}
-          value={input}
-          rows={4}
-          className="w-full p-2 px-3 mt-2 outline-none text-sm
-          rounded-md border border-gray-300"
-          placeholder="Describe what you want to see in the image, for example: A futuristic city skyline at sunset with flying cars and neon lights."
-          required
-        />
-        <p className="mt-4 text-sm font-medium">Image Style</p>
-
-        <div className="mt-3 flex gap-3 flex-wrap sm:max-w-9/11">
-          {imageStyle.map((item) => (
-            <span
-              onClick={() => setSelectedStyle(item)}
-              className={`text-xs px-4 py-1 border rounded-full cursor-pointer 
-              ${
-                selectedStyle === item
-                  ? "bg-green-50 text-green-700"
-                  : "text-gray-500 border-gray-300"
-              }`}
-              key={item}
-            >
-              {item}
-            </span>
-          ))}
-        </div>
-
-        <div className="my-6 flex items-center gap-2">
-          <label className="relative cursor-pointer">
-            <input
-              type="checkbox"
-              onChange={(e) => setPublish(e.target.checked)}
-              checked={publish}
-              className="sr-only peer"
-            />
-
-            <div className="w-9 h-5 bg-slate-300 rounded-full peer-checked:bg-green-500 transition"></div>
-
-            <span
-              className="absolute left-1 top-1 w-3 h-3 bg-white
-            rounded-full transition peer-checked:translate-x-4"
-            ></span>
-          </label>
-          <p className="text-sm">Make this image public</p>
-        </div>
-
-        <button
-          disabled={loading}
-          className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#00AD25]
-        to-[#04FF50] text-white px-4 py-2 mt-6
-        text-sm rounded-lg cursor-pointer"
+      <div className="flex items-start flex-wrap gap-6">
+        {/* Left Column - Configuration */}
+        <motion.form
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          onSubmit={onSubmitHandler}
+          className="w-full max-w-lg glass rounded-[var(--radius-lg)] p-6 border border-border"
         >
-          {loading ? (
-            <span
-              className="w-4 h-4 my-1 rounded-full border-2
-            border-t-transparent animate-spin"
-            ></span>
-          ) : (
-            <Image className="w-5" />
-          )}
-          Generate Image
-        </button>
-      </form>
-
-      {/* Right col */}
-      <div
-        className="w-full max-w-lg p-4 bg-white rounded-lg flex flex-col border
-      border-gray-200 min-h-96"
-      >
-        <div className="flex items-center gap-3">
-          <Image className="w-5 h-5 text-[#00AD25]" />
-          <h1 className="text-xl font-semibold">Generated Images</h1>
-        </div>
-        {!content ? (
-          <div className="flex-1 flex justify-center items-center">
-            <div className="text-sm flex flex-col items-center gap-5">
-              <Image className="w-9 h-9" />
-              <p>Enter a topic and click "Generate Image" to get started</p>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-lg gradient-accent flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-white" />
             </div>
+            <h2 className="text-xl font-semibold text-text-primary">Configuration</h2>
           </div>
-        ) : (
-          <div className="mt-3 h-full">
-            <img src={content} alt="image" className="w-full h-full" />
+
+          <label className="block mb-2 text-sm font-medium text-text-primary">
+            Describe your image
+          </label>
+          <textarea
+            onChange={(e) => setInput(e.target.value)}
+            value={input}
+            rows={4}
+            className="w-full px-4 py-3 glass rounded-[var(--radius-md)] text-text-primary placeholder-text-secondary border border-border focus:outline-none focus:ring-2 focus:ring-primary/60 transition resize-none"
+            placeholder="A futuristic city skyline at sunset with flying cars and neon lights..."
+            required
+          />
+
+          <label className="block mt-6 mb-3 text-sm font-medium text-text-primary">
+            Image Style
+          </label>
+          <div className="flex gap-2 flex-wrap">
+            {imageStyle.map((item) => (
+              <motion.span
+                key={item}
+                onClick={() => setSelectedStyle(item)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`text-xs px-4 py-2 border rounded-full cursor-pointer transition-all duration-200 ${
+                  selectedStyle === item
+                    ? "gradient-accent text-white border-transparent"
+                    : "text-text-secondary border-border hover:border-accent/60"
+                }`}
+              >
+                {item}
+              </motion.span>
+            ))}
           </div>
-        )}
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="my-6 flex items-center gap-3 glass rounded-lg p-3 border border-border"
+          >
+            <label className="relative cursor-pointer">
+              <input
+                type="checkbox"
+                onChange={(e) => setPublish(e.target.checked)}
+                checked={publish}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-border rounded-full peer-checked:bg-gradient-to-r peer-checked:from-primary peer-checked:to-accent transition-all duration-300"></div>
+              <span className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-5"></span>
+            </label>
+            <p className="text-sm text-text-primary">Make this image public</p>
+          </motion.div>
+
+          <motion.button
+            disabled={loading}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="w-full flex justify-center items-center gap-2 gradient-accent text-text-primary px-4 py-3 mt-6 text-sm font-medium rounded-lg cursor-pointer transition-all duration-300 hover:glow-accent disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <span className="w-5 h-5 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
+            ) : (
+              <Image className="w-5 h-5" />
+            )}
+            {loading ? "Generating..." : "Generate Image"}
+          </motion.button>
+        </motion.form>
+
+        {/* Right Column - Output */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="w-full max-w-lg glass rounded-[var(--radius-lg)] p-6 border border-border min-h-96 flex flex-col"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
+                <Image className="w-5 h-5 text-white" />
+              </div>
+              <h2 className="text-xl font-semibold text-text-primary">Generated Image</h2>
+            </div>
+            {content && (
+              <motion.a
+                href={content}
+                download
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="p-2 glass rounded-lg border border-border hover:border-primary/60 transition-all"
+              >
+                <Download className="w-5 h-5 text-text-primary" />
+              </motion.a>
+            )}
+          </div>
+
+          <AnimatePresence mode="wait">
+            {!content ? (
+              <motion.div
+                key="empty"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex-1 flex justify-center items-center"
+              >
+                <div className="text-center flex flex-col items-center gap-5">
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.1, 1],
+                      rotate: [0, 5, -5, 0],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  >
+                    <Image className="w-12 h-12 text-text-secondary" />
+                  </motion.div>
+                  <p className="text-text-secondary text-sm">
+                    Describe your image and click "Generate Image" to create
+                  </p>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="image"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.5 }}
+                className="mt-3 h-full rounded-lg overflow-hidden border border-border"
+              >
+                <img
+                  src={content}
+                  alt="Generated"
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </div>
   );

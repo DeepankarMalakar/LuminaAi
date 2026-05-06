@@ -25,7 +25,7 @@ const App = () => {
   // },[])
 
   return (
-    <div>
+    <div className="min-h-screen bg-bg-base">
       <Toaster />
       <Routes>
         <Route path="/" element={<Home />} />
