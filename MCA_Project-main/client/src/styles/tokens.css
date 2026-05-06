@@ -1,0 +1,42 @@
+@layer base {
+  :root {
+    /* Color Palette */
+    --color-primary: #7C3AED;           /* Electric Violet */
+    --color-accent: #3B82F6;            /* Neon Blue */
+    --color-cyan: #06B6D4;              /* Soft Cyan */
+    --color-bg-base: #050816;           /* Deep Dark */
+    --color-bg-surface: #0F0F23;        /* Dark Surface */
+    --color-bg-card: #13132A;           /* Card Surface */
+    --color-border: rgba(255,255,255,0.08); /* Subtle Border */
+    --color-text-primary: #FFFFFF;      /* White */
+    --color-text-secondary: #94A3B8;    /* Soft Gray */
+
+    /* Typography */
+    --font-heading: 'Inter', sans-serif;
+    --font-body: 'Outfit', sans-serif;
+
+    /* Spacing (8px base grid) */
+    --space-1: 0.25rem;  /* 4px */
+    --space-2: 0.5rem;   /* 8px */
+    --space-3: 0.75rem;  /* 12px */
+    --space-4: 1rem;     /* 16px */
+    --space-6: 1.5rem;   /* 24px */
+    --space-8: 2rem;     /* 32px */
+    --space-12: 3rem;    /* 48px */
+    --space-16: 4rem;    /* 64px */
+    --space-24: 6rem;    /* 96px */
+    --space-32: 8rem;    /* 128px */
+
+    /* Border Radius */
+    --radius-sm: 0.5rem;   /* 8px */
+    --radius-md: 0.75rem;  /* 12px */
+    --radius-lg: 1rem;     /* 16px */
+    --radius-xl: 1.5rem;   /* 24px */
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-glow-primary: 0 0 24px rgba(124, 58, 237, 0.4);
+    --shadow-glow-accent: 0 0 24px rgba(59, 130, 246, 0.4);
+    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  }
+}

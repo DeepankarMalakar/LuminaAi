@@ -3,7 +3,7 @@ import { Edit, Sparkle } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
 import toast from "react-hot-toast";
-import Markdown from "react-markdown";
+import ReactMarkdown from "react-markdown";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -16,7 +16,6 @@ const WriteArticle = () => {
 
   const [selectedLength, setSelectedLength] = useState(articleLength[0]);
   const [input, setInput] = useState("");
-  //After Backend
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState("");
 
@@ -25,7 +24,6 @@ const WriteArticle = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
-    //After Backend
     try {
       setLoading(true);
       const prompt = `Write an article about ${input} in ${selectedLength.text}`;
@@ -50,91 +48,99 @@ const WriteArticle = () => {
   };
 
   return (
-    <div
-      className="h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4
-    text-slate-700"
-    >
-      {/* left col */}
-      <form
-        onSubmit={onSubmitHandler}
-        className="w-full max-w-lg p-4 bg-white rounded-lg border border-gray-200"
-      >
-        <div className="flex items-center gap-3">
-          <Sparkle className="w-6 text-[#4A7AFF]" />
-          <h1 className="text-xl font-semibold">Article Configuration</h1>
-        </div>
-        <p className="mt-6 text-sm font-medium">Article Topic</p>
+    <div className="h-full overflow-y-auto p-6 bg-bg-base">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold mb-2">
+          <span className="gradient-text">Write Article</span>
+        </h1>
+        <p className="text-text-secondary text-lg">
+          Generate high-quality articles with AI assistance
+        </p>
+      </div>
 
-        <input
-          onChange={(e) => setInput(e.target.value)}
-          value={input}
-          type="text"
-          className="w-full p-2 px-3 mt-2 outline-none text-sm
-        rounded-md border border-gray-300"
-          placeholder="The future of AI is..."
-          required
-        />
-        <p className="mt-4 text-sm font-medium">Article Length</p>
-
-        <div className="mt-3 flex gap-3 flex-wrap sm:max-w-9/11">
-          {articleLength.map((item, index) => (
-            <span
-              onClick={() => setSelectedLength(item)}
-              className={`text-xs px-4 py-1 border rounded-full cursor-pointer 
-              ${
-                selectedLength.text === item.text
-                  ? "bg-blue-50 text-blue-700"
-                  : "text-gray-500 border-gray-300"
-              }`}
-              key={index}
-            >
-              {item.text}
-            </span>
-          ))}
-        </div>
-        <br />
-        <button
-          disabled={loading}
-          className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#226BFF]
-        to-[#65ADFF] text-white px-4 py-2 mt-6
-        text-sm rounded-lg cursor-pointer"
+      <div className="flex items-start flex-wrap gap-6">
+        {/* Left Column - Configuration */}
+        <form
+          onSubmit={onSubmitHandler}
+          className="w-full max-w-lg glass rounded-[var(--radius-lg)] p-6 border border-border"
         >
-          {
-            loading ? <span className="w-4 h-4 my-1 rounded-full border-2
-            border-t-transparent animate-spin"></span>
-            : <Edit className="w-5" />
-          }
-          
-          Generate Article
-        </button>
-      </form>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
+              <Sparkle className="w-5 h-5 text-white" />
+            </div>
+            <h2 className="text-xl font-semibold text-text-primary">Article Configuration</h2>
+          </div>
 
-      {/* Right col */}
-      <div
-        className="w-full max-w-lg p-4 bg-white rounded-lg flex flex-col border
-      border-gray-200 min-h-96 max-h-[600px]"
-      >
-        <div className="flex items-center gap-3">
-          <Edit className="w-5 h-5 text-[#4A7AFF]" />
-          <h1 className="text-xl font-semibold">Generated Article</h1>
+          <label className="block mb-2 text-sm font-medium text-text-primary">
+            Article Topic
+          </label>
+          <input
+            onChange={(e) => setInput(e.target.value)}
+            value={input}
+            type="text"
+            className="w-full px-4 py-3 glass rounded-[var(--radius-md)] text-text-primary placeholder-text-secondary border border-border focus:outline-none focus:ring-2 focus:ring-primary/60 transition"
+            placeholder="The future of AI is..."
+            required
+          />
+
+          <label className="block mt-6 mb-3 text-sm font-medium text-text-primary">
+            Article Length
+          </label>
+          <div className="flex gap-3 flex-wrap">
+            {articleLength.map((item, index) => (
+              <span
+                onClick={() => setSelectedLength(item)}
+                className={`text-xs px-4 py-2 border rounded-full cursor-pointer transition-all duration-200 ${
+                  selectedLength.text === item.text
+                    ? "gradient-primary text-white border-transparent"
+                    : "text-text-secondary border-border hover:border-primary/60"
+                }`}
+                key={index}
+              >
+                {item.text}
+              </span>
+            ))}
+          </div>
+
+          <button
+            disabled={loading}
+            className="w-full flex justify-center items-center gap-2 gradient-primary text-text-primary px-4 py-3 mt-8 text-sm font-medium rounded-lg cursor-pointer transition-all duration-300 hover:scale-103 hover:glow-primary active:scale-97 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <span className="w-5 h-5 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
+            ) : (
+              <Edit className="w-5 h-5" />
+            )}
+            {loading ? "Generating..." : "Generate Article"}
+          </button>
+        </form>
+
+        {/* Right Column - Output */}
+        <div className="w-full max-w-lg glass rounded-[var(--radius-lg)] p-6 border border-border min-h-96 max-h-[600px] flex flex-col">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-lg gradient-accent flex items-center justify-center">
+              <Edit className="w-5 h-5 text-white" />
+            </div>
+            <h2 className="text-xl font-semibold text-text-primary">Generated Article</h2>
+          </div>
+
+          {!content ? (
+            <div className="flex-1 flex justify-center items-center">
+              <div className="text-center flex flex-col items-center gap-5">
+                <Edit className="w-12 h-12 text-text-secondary" />
+                <p className="text-text-secondary text-sm">
+                  Enter a topic and click "Generate Article" to get started
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-3 h-full overflow-y-scroll text-sm text-text-secondary">
+              <div className="reset-tw">
+                <ReactMarkdown>{content}</ReactMarkdown>
+              </div>
+            </div>
+          )}
         </div>
-
-        {/* //After Backend */}
-
-        {!content ? (
-          <div className="flex-1 flex justify-center items-center">
-            <div className="text-sm flex flex-col items-center gap-5">
-              <Edit className="w-9 h-9" />
-              <p>Enter a topic and click "Generate Article" to get started</p>
-            </div>
-          </div>
-        ) : (
-          <div className="mt-3 h-full overflow-y-scroll text-sm text-slate-600">
-            <div className="reset-tw">
-              <Markdown>{content}</Markdown>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

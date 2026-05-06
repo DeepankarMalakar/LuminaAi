@@ -1,5 +1,7 @@
-
+import React from 'react';
+import { motion } from 'framer-motion';
 import { assets } from "../assets/assets.js";
+import { staggerContainer, staggerItem, fadeUp, withReducedMotion, viewportConfig } from '../utils/motion';
 
 const Testimonial = () => {
   const dummyTestimonialData = [
@@ -33,50 +35,125 @@ const Testimonial = () => {
   ];
 
   return (
-    <div className="px-4 sm:px-20 xl:px-32 py-24">
-      <div className="text-center">
-        <h2 className="text-slate-700 text-[42px] font-semibold">
-          Loved by Creators
+    <div className="relative px-4 sm:px-20 xl:px-32 py-24 overflow-hidden">
+      {/* Ambient Background Glows */}
+      <div className="glow-orb-cyan top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2" />
+      <div className="glow-orb-violet top-3/4 right-1/3 translate-x-1/2 translate-y-1/2" />
+
+      {/* Floating Particles */}
+      <motion.div
+        className="absolute top-20 left-10 w-2 h-2 rounded-full bg-primary/40"
+        animate={{
+          y: [0, -30, 0],
+          opacity: [0.3, 0.8, 0.3],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+      <motion.div
+        className="absolute top-40 right-20 w-3 h-3 rounded-full bg-accent/40"
+        animate={{
+          y: [0, -40, 0],
+          opacity: [0.4, 1, 0.4],
+        }}
+        transition={{
+          duration: 5,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1,
+        }}
+      />
+      <motion.div
+        className="absolute bottom-20 left-1/4 w-2 h-2 rounded-full bg-cyan-400/40"
+        animate={{
+          y: [0, -25, 0],
+          x: [0, 15, 0],
+          opacity: [0.3, 0.7, 0.3],
+        }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2,
+        }}
+      />
+
+      {/* Section Header */}
+      <motion.div
+        {...withReducedMotion(fadeUp)}
+        initial="initial"
+        whileInView="animate"
+        viewport={viewportConfig}
+        className="relative z-10 text-center mb-12"
+      >
+        <h2 className="text-text-primary text-5xl font-bold mb-4">
+          Loved by <span className="gradient-text">Creators</span>
         </h2>
-        <p className="text-gray-500 max-w-lg mx-auto">
+        <p className="text-text-secondary max-w-lg mx-auto text-lg">
           Don't just take our word for it. Here's what our users are saying.
         </p>
-      </div>
-      <div className="flex flex-wrap mt-10 justify-center">
+      </motion.div>
+
+      {/* Testimonial Cards */}
+      <motion.div
+        variants={withReducedMotion(staggerContainer)}
+        initial="initial"
+        whileInView="animate"
+        viewport={viewportConfig}
+        className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
         {dummyTestimonialData.map((testimonial, index) => (
-          <div
+          <motion.div
             key={index}
-            className="p-8 m-4 max-w-xs rounded-lg bg-[#FDFDFE] shadow-lg border border-gray-100 hover:-translate-y-1 transition duration-300 cursor-pointer"
+            variants={staggerItem}
+            className="p-6 glass rounded-[var(--radius-lg)] border-t border-white/10 transition-all duration-300"
+            whileHover={{
+              y: -6,
+              borderColor: 'rgba(124, 58, 237, 0.3)',
+              boxShadow: '0 0 16px rgba(124, 58, 237, 0.2)',
+            }}
           >
-            <div className="flex items-center gap-1">
+            {/* Star Rating */}
+            <div className="flex gap-1 mb-4">
               {Array(5)
                 .fill(0)
-                .map((_, index) => (
+                .map((_, i) => (
                   <img
-                    key={index}
-                    src={index < testimonial.rating ? assets.star_icon : assets.star_dull_icon}
-                    className="w-4 h-4" alt="star"
+                    key={i}
+                    src={i < testimonial.rating ? assets.star_icon : assets.star_dull_icon}
+                    className="w-5 h-5"
+                    alt="star"
                   />
                 ))}
             </div>
-            <p className="text-gray-500 text-sm my-5">
+
+            {/* Testimonial Text */}
+            <p className="text-text-secondary text-sm leading-relaxed mb-6">
               "{testimonial.content}"
             </p>
-            <hr className="mb-5 border-gray-300" />
-            <div className="flex items-center gap-4">
+
+            {/* Author */}
+            <div className="flex items-center gap-3">
               <img
                 src={testimonial.image}
-                className="w-12 object-contain rounded-full"
-                alt=""
+                alt={testimonial.name}
+                className="w-10 h-10 rounded-full object-cover"
               />
-              <div className="text-sm text-gray-600">
-                <h3 className="font-medium">{testimonial.name}</h3>
-                <p className="text-xs text-gray-500">{testimonial.title}</p>
+              <div>
+                <h4 className="text-text-primary font-medium text-sm">
+                  {testimonial.name}
+                </h4>
+                <p className="text-text-secondary text-xs">
+                  {testimonial.title}
+                </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };
